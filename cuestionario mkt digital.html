@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuestionario de Marketing Digital</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange-accent: #FF6B35;
+      --slate-950: #020617;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-400: #94a3b8;
+      --slate-300: #cbd5e1;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--slate-950);
+      color: var(--slate-300);
+    }
+    
+    .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .accent-gradient {
+      background: linear-gradient(135deg, var(--orange-accent) 0%, #ff8f6b 100%);
+    }
+    
+    .glass-card {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 107, 53, 0.15);
+    }
+    
+    .input-field {
+      background: var(--slate-900);
+      border: 1px solid var(--slate-700);
+      transition: all 0.3s ease;
+    }
+    
+    .input-field:focus {
+      border-color: var(--orange-accent);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+      outline: none;
+    }
+    
+    .input-field::placeholder {
+      color: var(--slate-400);
+    }
+    
+    .checkbox-card {
+      background: var(--slate-900);
+      border: 2px solid var(--slate-700);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .checkbox-card:hover {
+      border-color: var(--slate-400);
+    }
+    
+    .checkbox-card.selected {
+      border-color: var(--orange-accent);
+      background: rgba(255, 107, 53, 0.1);
+    }
+
+    .checkbox-card:has(input:focus-visible) {
+      outline: 2px solid var(--orange-accent);
+      outline-offset: 2px;
+    }
+    
+    .btn-primary {
+      background: var(--orange-accent);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background: #ff8f6b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--slate-700);
+      color: var(--slate-300);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      border-color: var(--orange-accent);
+      color: var(--orange-accent);
+    }
+    
+    .progress-step {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--slate-700);
+      transition: all 0.4s ease;
+    }
+    
+    .progress-step.active {
+      background: var(--orange-accent);
+      box-shadow: 0 0 15px rgba(255, 107, 53, 0.5);
+    }
+    
+    .progress-step.completed {
+      background: var(--orange-accent);
+    }
+    
+    .progress-line {
+      height: 2px;
+      background: var(--slate-700);
+      flex: 1;
+    }
+    
+    .progress-line.completed {
+      background: var(--orange-accent);
+    }
+    
+    .section-enter {
+      animation: slideIn 0.5s ease forwards;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .home-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      background: var(--slate-900);
+      border: 1px solid var(--orange-accent);
+      color: var(--orange-accent);
+      transition: all 0.3s ease;
+    }
+    
+    .home-btn:hover {
+      background: var(--orange-accent);
+      color: white;
+    }
+    
+    .toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 200;
+      padding: 16px 24px;
+      border-radius: 12px;
+      animation: toastIn 0.4s ease;
+    }
+    
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: var(--slate-900);
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: var(--slate-700);
+      border-radius: 3px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+      background: var(--slate-600);
+    }
+  </style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="min-h-screen flex flex-col overflow-auto scrollbar-thin">
+    <button id="homeBtn" class="home-btn hidden px-4 py-3 rounded-full flex items-center gap-2 font-medium" onclick="goToStart()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> <polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Inicio</span>
+    </button>
+    
+    <div id="toastContainer"></div>
+    
+    <header class="py-6 px-4 sm:px-8 shrink-0">
+     <div class="max-w-4xl mx-auto">
+      <div class="flex items-center justify-between">
+       <div class="flex items-center gap-3">
+        <img src="https://github.com/santosaldia/logo/raw/main/logo%20sin%20fondo.png" alt="Logo" class="h-24 w-auto object-contain" loading="lazy" onerror="console.error('Logo failed to load:', this.src); this.style.display='none';">
+       </div>
+       <h1 id="mainTitle" class="font-heading text-xl sm:text-2xl font-bold text-white">Cuestionario de Marketing</h1>
+      </div>
+     </div>
+    </header>
+    
+    <div id="progressBar" class="px-4 sm:px-8 pb-4 shrink-0 hidden">
+     <div class="max-w-4xl mx-auto">
+      <div class="flex items-center gap-2">
+       <div class="progress-step" data-step="0"></div>
+       <div class="progress-line" data-line="0"></div>
+       <div class="progress-step" data-step="1"></div>
+       <div class="progress-line" data-line="1"></div>
+       <div class="progress-step" data-step="2"></div>
+       <div class="progress-line" data-line="2"></div>
+       <div class="progress-step" data-step="3"></div>
+       <div class="progress-line" data-line="3"></div>
+       <div class="progress-step" data-step="4"></div>
+      </div>
+      <div class="flex justify-between mt-2 text-xs text-slate-400">
+        <span>Datos</span> <span>Tecnología</span> <span>Proceso</span> <span>Histórico</span> <span>Inversión</span>
+      </div>
+     </div>
+    </div>
+    
+    <main class="flex-1 flex flex-col px-4 sm:px-8 py-6">
+     <div class="max-w-4xl mx-auto w-full my-auto">
+      
+      <div id="welcomeScreen" class="section-enter">
+       <div class="glass-card rounded-3xl p-8 sm:p-12 text-center">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-2xl accent-gradient flex items-center justify-center">
+         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewbox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        </div>
+        <h2 id="subtitle" class="font-heading text-3xl sm:text-4xl font-bold text-white mb-4">Cuestionario de Marketing Digital</h2>
+        <p class="text-slate-400 text-lg mb-8 max-w-2xl mx-auto">Ayúdanos a entender vuestros objetivos y procesos actuales para diseñar una estrategia orientada a resultados reales.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button onclick="startQuestionnaire()" class="btn-primary px-8 py-4 rounded-xl font-heading font-semibold text-lg"> Comenzar cuestionario 
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" />
+          </svg>
+          </button>
+        </div>
+        <p class="text-slate-500 text-sm mt-6">⏱️ Tiempo estimado: 10-15 minutos</p>
+       </div>
+      </div>
+
+      <form id="questionnaireForm" action="https://api.web3forms.com/submit" method="POST" class="hidden" target="_blank">
+       
+       <input type="hidden" name="access_key" value="86495111-39cd-4488-bc80-63ac26ca5723">
+       <input type="hidden" name="subject" value="🚀 Nuevo Cuestionario de Marketing Digital">
+       <input type="hidden" name="redirect" value="https://web3forms.com/success">
+
+       <div id="section0" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 0 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">Objetivos y Expectativas</h2>
+          <p class="text-slate-400 mt-2">Comencemos con tus datos básicos y lo que esperas conseguir.</p>
+         </div>
+         <div class="space-y-6">
+          <div class="grid sm:grid-cols-2 gap-6">
+           <div><label class="block text-sm font-medium text-slate-300 mb-2">Nombre *</label> <input type="text" name="Nombre" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Tu nombre" data-required="true"></div>
+           <div><label class="block text-sm font-medium text-slate-300 mb-2">Apellidos *</label> <input type="text" name="Apellidos" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Tus apellidos" data-required="true"></div>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Nombre de la organización *</label> <input type="text" name="Organizacion" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Tu empresa u organización" data-required="true"></div>
+          
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Correo electrónico *</label> <input type="email" name="email" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="correo@ejemplo.com" data-required="true"></div>
+          
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">¿Qué queréis conseguir exactamente al invertir en marketing digital? *</label> 
+            <p class="text-slate-500 text-sm mb-3">Ej: Vender directamente un producto en la web, conseguir un volumen alto de contactos, dar a conocer un nuevo servicio...</p>
+            <textarea name="Objetivo_Principal" required rows="3" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe tu objetivo principal..." data-required="true"></textarea>
+          </div>
+
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Si solo pudierais potenciar un único producto o servicio, ¿cuál sería y por qué? *</label> 
+            <textarea name="Producto_Estrella" required rows="3" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe tu producto estrella..." data-required="true"></textarea>
+          </div>
+         </div>
+         <div class="flex justify-end mt-8">
+           <button type="button" onclick="nextSection(0)" id="nextBtn0" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold disabled:opacity-50" disabled> Siguiente 
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></button>
+         </div>
+        </div>
+       </div>
+       
+       <div id="section1" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 1 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">Tecnología y Herramientas</h2>
+          <p class="text-slate-400 mt-2">Hablemos de cómo gestionáis los datos actualmente.</p>
+         </div>
+         <div class="space-y-8">
+          <div><label class="block text-sm font-medium text-slate-300 mb-4">¿Utilizáis alguna herramienta CRM específica? *</label>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="crm_herramienta" data-value="HubSpot">
+                <span class="text-white font-medium">HubSpot</span> 
+                <input type="radio" name="Herramienta_CRM" value="HubSpot" class="sr-only" required>
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="crm_herramienta" data-value="Salesforce">
+                <span class="text-white font-medium">Salesforce</span> 
+                <input type="radio" name="Herramienta_CRM" value="Salesforce" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="crm_herramienta" data-value="Pipedrive">
+                <span class="text-white font-medium">Pipedrive</span> 
+                <input type="radio" name="Herramienta_CRM" value="Pipedrive" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="crm_herramienta" data-value="Excel_Correo">
+                <span class="text-white font-medium">Excel / Correo</span> 
+                <input type="radio" name="Herramienta_CRM" value="Excel o Correo" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="crm_herramienta" data-value="No usamos">
+                <span class="text-white font-medium">No usamos</span> 
+                <input type="radio" name="Herramienta_CRM" value="No usamos" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="crm_herramienta" data-value="No lo se">
+                <span class="text-white font-medium">No lo sé</span> 
+                <input type="radio" name="Herramienta_CRM" value="No lo sé" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center sm:col-span-2" data-radio="crm_herramienta" data-value="Otro">
+                <span class="text-white font-medium">Otro</span> 
+                <input type="radio" name="Herramienta_CRM" value="Otro" class="sr-only">
+              </label>
+            </div>
+            <div id="otroCrmContainer" class="hidden mt-4 section-enter">
+              <label class="block text-sm font-medium text-slate-300 mb-2">¿Cuál utilizáis? *</label>
+              <input type="text" id="otroCrmInput" name="Otro_CRM_Especificado" class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Ej: Zoho, ActiveCampaign...">
+            </div>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Cuando alguien rellena un formulario en vuestra web, ¿qué ocurre a continuación? *</label>
+           <p class="text-slate-500 text-sm mb-3">Ej: Recibe un email automático, un asesor le llama en 10 minutos, no recibe nada hasta que le escribimos a mano...</p>
+           <textarea name="Proceso_Automatizacion" required rows="4" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe el proceso actual..." data-required="true"></textarea>
+          </div>
+         </div>
+         <div class="flex justify-between mt-8">
+           <button type="button" onclick="prevSection(1)" class="btn-secondary px-6 py-3 rounded-xl font-heading font-semibold">
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2"><path d="M19 12H5" /> <path d="m12 19-7-7 7-7" /></svg> Anterior </button> 
+           <button type="button" onclick="nextSection(1)" id="nextBtn1" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold" disabled> Siguiente 
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></button>
+         </div>
+        </div>
+       </div>
+       
+       <div id="section2" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 2 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">El Proceso de Venta</h2>
+          <p class="text-slate-400 mt-2">Analicemos el viaje desde el clic hasta convertirse en cliente.</p>
+         </div>
+         <div class="space-y-8">
+          <div><label class="block text-sm font-medium text-slate-300 mb-4">¿Cuánto tiempo pasa de media hasta que contactáis a un lead web? *</label>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="velocidad_respuesta" data-value="Menos de 1 hora">
+                <span class="text-white font-medium">Menos de 1 hora</span> 
+                <input type="radio" name="Velocidad_Respuesta" value="Menos de 1 hora" class="sr-only" required>
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="velocidad_respuesta" data-value="1-4 horas">
+                <span class="text-white font-medium">1-4 horas</span> 
+                <input type="radio" name="Velocidad_Respuesta" value="1-4 horas" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="velocidad_respuesta" data-value="Mismo día">
+                <span class="text-white font-medium">Mismo día (4-24h)</span> 
+                <input type="radio" name="Velocidad_Respuesta" value="Mismo día" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="velocidad_respuesta" data-value="1-3 días">
+                <span class="text-white font-medium">1-3 días</span> 
+                <input type="radio" name="Velocidad_Respuesta" value="1-3 días" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="velocidad_respuesta" data-value="Más de 3 días">
+                <span class="text-white font-medium">Más de 3 días</span> 
+                <input type="radio" name="Velocidad_Respuesta" value="Más de 3 días" class="sr-only">
+              </label>
+              <label class="checkbox-card p-4 rounded-xl cursor-pointer text-center" data-radio="velocidad_respuesta" data-value="No contamos con seguimiento">
+                <span class="text-white font-medium">No contamos con seguimiento de leads</span> 
+                <input type="radio" name="Velocidad_Respuesta" value="No contamos con seguimiento de leads" class="sr-only">
+              </label>
+            </div>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Cuando un cliente decide NO compraros, ¿cuál es la barrera más habitual? *</label>
+           <p class="text-slate-500 text-sm mb-3">Ej: 'Sois muy caros', 'Me da desconfianza', 'Se fueron con la competencia'...</p>
+           <textarea name="Freno_de_Ventas" required rows="3" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe el freno de venta principal..." data-required="true"></textarea>
+          </div>
+         </div>
+         <div class="flex justify-between mt-8">
+           <button type="button" onclick="prevSection(2)" class="btn-secondary px-6 py-3 rounded-xl font-heading font-semibold">
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2"><path d="M19 12H5" /> <path d="m12 19-7-7 7-7" /></svg> Anterior </button> 
+           <button type="button" onclick="nextSection(2)" id="nextBtn2" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold" disabled> Siguiente 
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></button>
+         </div>
+        </div>
+       </div>
+       
+       <div id="section3" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 3 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">Histórico de Publicidad y Métricas</h2>
+          <p class="text-slate-400 mt-2">¿Qué habéis probado hasta ahora y cómo ha funcionado?</p>
+         </div>
+         <div class="space-y-8">
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">¿Habéis invertido en Ads (Google, Meta, LinkedIn)? Si es así, ¿qué tal fue? *</label>
+           <textarea name="Experiencia_Publicidad" required rows="4" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe tu experiencia previa con publicidad digital..." data-required="true"></textarea>
+          </div>
+         </div>
+         <div class="flex justify-between mt-8">
+           <button type="button" onclick="prevSection(3)" class="btn-secondary px-6 py-3 rounded-xl font-heading font-semibold">
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2"><path d="M19 12H5" /> <path d="m12 19-7-7 7-7" /></svg> Anterior </button> 
+           <button type="button" onclick="nextSection(3)" id="nextBtn3" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold" disabled> Siguiente 
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></button>
+         </div>
+        </div>
+       </div>
+       
+       <div id="section4" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 4 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">El Cuello de Botella y Presupuesto</h2>
+          <p class="text-slate-400 mt-2">Casi hemos terminado. Analicemos el punto crítico y la inversión.</p>
+         </div>
+         <div class="space-y-8">
+          <div><label class="block text-sm font-medium text-slate-300 mb-4">¿Dónde os duele más el proceso de ventas? *</label>
+           <div class="grid sm:grid-cols-1 gap-3">
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-radio="cuello_botella" data-value="Trafico">
+             <div class="flex items-center gap-3">
+              <span class="text-white font-medium">1. No nos visita nadie (Falta tráfico)</span>
+             </div><input type="radio" name="Cuello_de_Botella" value="No nos visita nadie" class="sr-only" required> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-radio="cuello_botella" data-value="Leads">
+             <div class="flex items-center gap-3">
+              <span class="text-white font-medium">2. Nos visitan pero nadie deja sus datos (Falta conversión web)</span>
+             </div><input type="radio" name="Cuello_de_Botella" value="Nos visitan pero nadie nos deja sus datos" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-radio="cuello_botella" data-value="Ventas">
+             <div class="flex items-center gap-3">
+              <span class="text-white font-medium">3. Tenemos muchos contactos pero no logramos cerrar las ventas</span>
+             </div><input type="radio" name="Cuello_de_Botella" value="Tenemos muchos contactos pero no cerramos ventas" class="sr-only"> </label>
+           </div>
+          </div>
+          
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Aparte de nuestros honorarios, ¿qué presupuesto publicitario tenéis pensado invertir en plataformas (Google, Meta, etc.)? *</label>
+           <input type="text" name="Presupuesto_Publicitario" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Ej: €500/mes, €5.000 total..." data-required="true">
+          </div>
+         </div>
+         <div class="flex justify-between mt-8">
+           <button type="button" onclick="prevSection(4)" class="btn-secondary px-6 py-3 rounded-xl font-heading font-semibold">
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2"><path d="M19 12H5" /> <path d="m12 19-7-7 7-7" /></svg> Anterior </button> 
+           <button type="submit" id="submitBtn" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold"> <span id="submitText">Enviar cuestionario</span>
+           <svg id="submitIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="m22 2-7 20-4-9-9-4Z" /> <path d="M22 2 11 13" /></svg>
+           <svg id="loadingIcon" class="hidden animate-spin inline ml-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg></button>
+         </div>
+        </div>
+       </div>
+      </form>
+      
+      <div id="successScreen" class="hidden section-enter">
+       <div class="glass-card rounded-3xl p-8 sm:p-12 text-center">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center">
+         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewbox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /> <polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <h2 class="font-heading text-3xl font-bold text-white mb-4">¡Cuestionario enviado!</h2>
+        <p class="text-slate-400 text-lg mb-8 max-w-xl mx-auto">Gracias por completar el cuestionario. Hemos recibido tu información y nos pondremos en contacto pronto para definir tu estrategia.</p><button onclick="goToStart()" class="btn-secondary px-8 py-3 rounded-xl font-heading font-semibold"> Volver al inicio </button>
+       </div>
+      </div>
+      
+     </div>
+    </main>
+    
+    <footer class="py-6 px-4 sm:px-8 text-center shrink-0">
+     <p class="text-slate-500 text-sm">© 2026 Cuestionario de Marketing Digital</p>
+    </footer>
+  </div>
+  
+  <script>
+    let currentSection = -1;
+    const totalSections = 5;
+    
+    // Setup radio cards
+    document.querySelectorAll('.checkbox-card[data-radio]').forEach(card => {
+      card.addEventListener('click', function(e) {
+        e.preventDefault();
+        const radioName = this.dataset.radio;
+        
+        // Deselect all in group
+        document.querySelectorAll(`.checkbox-card[data-radio="${radioName}"]`).forEach(c => {
+          c.classList.remove('selected');
+          c.querySelector('input[type="radio"]').checked = false;
+        });
+        
+        // Select this one
+        this.classList.add('selected');
+        this.querySelector('input[type="radio"]').checked = true;
+
+        if(radioName === 'crm_herramienta') {
+            const otroContainer = document.getElementById('otroCrmContainer');
+            const otroInput = document.getElementById('otroCrmInput');
+            if(this.dataset.value === 'Otro') {
+                otroContainer.classList.remove('hidden');
+            } else {
+                otroContainer.classList.add('hidden');
+                otroInput.value = ''; // Limpiar si cambian de opinión
+            }
+        }
+        
+        validateSection(currentSection);
+      });
+    });
+
+    document.getElementById('otroCrmInput').addEventListener('input', () => {
+        validateSection(1);
+    });
+    
+    // Input validation listeners
+    document.querySelectorAll('input[data-required="true"], textarea[data-required="true"]').forEach(input => {
+      input.addEventListener('input', () => validateSection(currentSection));
+    });
+    
+    function validateSection(sectionNum) {
+      const section = document.getElementById(`section${sectionNum}`);
+      if (!section) return false;
+      
+      let allFilled = true;
+      
+      const requiredInputs = section.querySelectorAll('input[data-required="true"], textarea[data-required="true"]');
+      requiredInputs.forEach(input => {
+        if (!input.value.trim()) {
+          allFilled = false;
+        }
+        if (input.type === 'email' && input.value.trim()) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(input.value)) {
+            allFilled = false;
+          }
+        }
+      });
+      
+      if (sectionNum === 1) {
+        const radioSelected = document.querySelector('input[name="Herramienta_CRM"]:checked');
+        if (!radioSelected) {
+            allFilled = false;
+        } else if (radioSelected.value === 'Otro') {
+            if (!document.getElementById('otroCrmInput').value.trim()) {
+                allFilled = false;
+            }
+        }
+      }
+      
+      if (sectionNum === 2) {
+        const radioSelected = document.querySelector('input[name="Velocidad_Respuesta"]:checked');
+        if (!radioSelected) allFilled = false;
+      }
+
+      if (sectionNum === 4) {
+        const radioSelected = document.querySelector('input[name="Cuello_de_Botella"]:checked');
+        if (!radioSelected) allFilled = false;
+      }
+      
+      const nextBtn = document.getElementById(`nextBtn${sectionNum}`);
+      if (nextBtn) {
+        nextBtn.disabled = !allFilled;
+      }
+      
+      return allFilled;
+    }
+    
+    function startQuestionnaire() {
+      document.getElementById('welcomeScreen').classList.add('hidden');
+      document.getElementById('questionnaireForm').classList.remove('hidden');
+      document.getElementById('progressBar').classList.remove('hidden');
+      document.getElementById('homeBtn').classList.remove('hidden');
+      document.getElementById('homeBtn').classList.add('flex');
+      showSection(0);
+    }
+    
+    function showSection(sectionNum) {
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      
+      const targetSection = document.getElementById(`section${sectionNum}`);
+      if (targetSection) {
+        targetSection.classList.remove('hidden');
+        targetSection.classList.add('section-enter');
+        currentSection = sectionNum;
+        updateProgress(sectionNum);
+        validateSection(sectionNum);
+        document.getElementById('app').scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+    
+    function updateProgress(currentStep) {
+      for (let i = 0; i < totalSections; i++) {
+        const step = document.querySelector(`.progress-step[data-step="${i}"]`);
+        const line = document.querySelector(`.progress-line[data-line="${i}"]`);
+        
+        if (i < currentStep) {
+          step.classList.add('completed');
+          step.classList.remove('active');
+          if (line) line.classList.add('completed');
+        } else if (i === currentStep) {
+          step.classList.add('active');
+          step.classList.remove('completed');
+          if (line) line.classList.remove('completed');
+        } else {
+          step.classList.remove('active', 'completed');
+          if (line) line.classList.remove('completed');
+        }
+      }
+    }
+    
+    function nextSection(current) {
+      if (validateSection(current)) {
+        showSection(current + 1);
+      }
+    }
+    
+    function prevSection(current) {
+      showSection(current - 1);
+    }
+    
+    function goToStart() {
+      currentSection = -1;
+      document.getElementById('questionnaireForm').classList.add('hidden');
+      document.getElementById('questionnaireForm').reset();
+      document.getElementById('progressBar').classList.add('hidden');
+      document.getElementById('successScreen').classList.add('hidden');
+      document.getElementById('welcomeScreen').classList.remove('hidden');
+      document.getElementById('homeBtn').classList.add('hidden');
+      document.getElementById('homeBtn').classList.remove('flex');
+      
+      document.querySelectorAll('.checkbox-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      document.getElementById('otroCrmContainer').classList.add('hidden');
+      
+      document.querySelectorAll('.progress-step').forEach(s => s.classList.remove('active', 'completed'));
+      document.querySelectorAll('.progress-line').forEach(l => l.classList.remove('completed'));
+      
+      document.getElementById('app').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type === 'success' ? 'bg-green-500/90' : 'bg-red-500/90'} text-white font-medium rounded-xl`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-20px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    document.getElementById('questionnaireForm').addEventListener('submit', function() {
+        // Mostramos el estado de carga brevemente
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const submitIcon = document.getElementById('submitIcon');
+        const loadingIcon = document.getElementById('loadingIcon');
+        
+        submitBtn.disabled = true;
+        submitText.textContent = 'Enviando...';
+        submitIcon.classList.add('hidden');
+        loadingIcon.classList.remove('hidden');
+
+        // Tras un segundo, mostramos la pantalla de éxito en nuestra pestaña
+        setTimeout(() => {
+          document.getElementById('questionnaireForm').classList.add('hidden');
+          document.getElementById('progressBar').classList.add('hidden');
+          document.getElementById('successScreen').classList.remove('hidden');
+          showToast('Formulario enviado correctamente.', 'success');
+          
+          // Restauramos el botón por si el usuario vuelve al inicio
+          submitBtn.disabled = false;
+          submitText.textContent = 'Enviar cuestionario';
+          submitIcon.classList.remove('hidden');
+          loadingIcon.classList.add('hidden');
+        }, 1500);
+    });
+
+  </script>
+ </body>
+</html>
