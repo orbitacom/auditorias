@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuestionario de Identidad Visual</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange-accent: #FF6B35;
+      --slate-950: #020617;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-400: #94a3b8;
+      --slate-300: #cbd5e1;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--slate-950);
+      color: var(--slate-300);
+    }
+    
+    .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    .accent-gradient {
+      background: linear-gradient(135deg, var(--orange-accent) 0%, #ff8f6b 100%);
+    }
+    
+    .glass-card {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 107, 53, 0.15);
+    }
+    
+    .input-field {
+      background: var(--slate-900);
+      border: 1px solid var(--slate-700);
+      transition: all 0.3s ease;
+    }
+    
+    .input-field:focus {
+      border-color: var(--orange-accent);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+      outline: none;
+    }
+    
+    .input-field::placeholder {
+      color: var(--slate-400);
+    }
+    
+    .checkbox-card {
+      background: var(--slate-900);
+      border: 2px solid var(--slate-700);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .checkbox-card:hover {
+      border-color: var(--slate-400);
+    }
+    
+    .checkbox-card.selected {
+      border-color: var(--orange-accent);
+      background: rgba(255, 107, 53, 0.1);
+    }
+
+    .checkbox-card:has(input:focus-visible) {
+      outline: 2px solid var(--orange-accent);
+      outline-offset: 2px;
+    }
+    
+    .btn-primary {
+      background: var(--orange-accent);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background: #ff8f6b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--slate-700);
+      color: var(--slate-300);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      border-color: var(--orange-accent);
+      color: var(--orange-accent);
+    }
+    
+    .progress-step {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--slate-700);
+      transition: all 0.4s ease;
+    }
+    
+    .progress-step.active {
+      background: var(--orange-accent);
+      box-shadow: 0 0 15px rgba(255, 107, 53, 0.5);
+    }
+    
+    .progress-step.completed {
+      background: var(--orange-accent);
+    }
+    
+    .progress-line {
+      height: 2px;
+      background: var(--slate-700);
+      flex: 1;
+    }
+    
+    .progress-line.completed {
+      background: var(--orange-accent);
+    }
+    
+    .section-enter {
+      animation: slideIn 0.5s ease forwards;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .file-drop-zone {
+      border: 2px dashed var(--slate-700);
+      background: var(--slate-900);
+      transition: all 0.3s ease;
+    }
+    
+    .file-drop-zone:hover, .file-drop-zone.dragover {
+      border-color: var(--orange-accent);
+      background: rgba(255, 107, 53, 0.05);
+    }
+    
+    .home-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      background: var(--slate-900);
+      border: 1px solid var(--orange-accent);
+      color: var(--orange-accent);
+      transition: all 0.3s ease;
+    }
+    
+    .home-btn:hover {
+      background: var(--orange-accent);
+      color: white;
+    }
+    
+    .toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 200;
+      padding: 16px 24px;
+      border-radius: 12px;
+      animation: toastIn 0.4s ease;
+    }
+    
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: var(--slate-900);
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: var(--slate-700);
+      border-radius: 3px;
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+      background: var(--slate-600);
+    }
+  </style>
+ </head>
+ <body class="h-full">
+  <div id="app" class="min-h-screen flex flex-col overflow-auto scrollbar-thin">
+    <button id="homeBtn" class="home-btn hidden px-4 py-3 rounded-full flex items-center gap-2 font-medium" onclick="goToStart()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> <polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Inicio</span>
+    </button>
+    
+    <div id="toastContainer"></div>
+    
+    <header class="py-6 px-4 sm:px-8 shrink-0">
+     <div class="max-w-4xl mx-auto">
+      <div class="flex items-center justify-between">
+       <div class="flex items-center gap-3">
+        <img src="https://github.com/santosaldia/logo/raw/main/logo%20sin%20fondo.png" alt="Logo" class="h-24 w-auto object-contain" loading="lazy" onerror="console.error('Logo failed to load:', this.src); this.style.display='none';">
+       </div>
+       <h1 id="mainTitle" class="font-heading text-xl sm:text-2xl font-bold text-white">Cuestionario de Identidad Visual</h1>
+      </div>
+     </div>
+    </header>
+    
+    <div id="progressBar" class="px-4 sm:px-8 pb-4 shrink-0 hidden">
+     <div class="max-w-4xl mx-auto">
+      <div class="flex items-center gap-2">
+       <div class="progress-step" data-step="0"></div>
+       <div class="progress-line" data-line="0"></div>
+       <div class="progress-step" data-step="1"></div>
+       <div class="progress-line" data-line="1"></div>
+       <div class="progress-step" data-step="2"></div>
+       <div class="progress-line" data-line="2"></div>
+       <div class="progress-step" data-step="3"></div>
+       <div class="progress-line" data-line="3"></div>
+       <div class="progress-step" data-step="4"></div>
+      </div>
+      <div class="flex justify-between mt-2 text-xs text-slate-400">
+        <span>Datos</span> <span>Logotipo</span> <span>Colores</span> <span>Fotos</span> <span>Soportes</span>
+      </div>
+     </div>
+    </div>
+    
+    <main class="flex-1 flex flex-col px-4 sm:px-8 py-6">
+     <div class="max-w-4xl mx-auto w-full my-auto">
+      
+      <div id="welcomeScreen" class="section-enter">
+       <div class="glass-card rounded-3xl p-8 sm:p-12 text-center">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-2xl accent-gradient flex items-center justify-center">
+         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewbox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle> <path d="M12 16v-4" /> <path d="M12 8h.01" />
+         </svg>
+        </div>
+        <h2 id="subtitle" class="font-heading text-3xl sm:text-4xl font-bold text-white mb-4">Nos adentramos en la imagen de tu empresa</h2>
+        <p class="text-slate-400 text-lg mb-8 max-w-2xl mx-auto">Este cuestionario nos ayudará a entender vuestra identidad visual actual y crear un manual de imagen corporativa a medida.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button onclick="startQuestionnaire()" class="btn-primary px-8 py-4 rounded-xl font-heading font-semibold text-lg"> Comenzar cuestionario 
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" />
+          </svg>
+          </button>
+        </div>
+        <p class="text-slate-500 text-sm mt-6">⏱️ Tiempo estimado: 10-15 minutos</p>
+       </div>
+      </div>
+      
+      <iframe name="hidden_iframe" id="hidden_iframe" class="hidden"></iframe>
+
+      <form id="questionnaireForm" action="https://forminit.com/f/q0f8y6rozxr" method="POST" enctype="multipart/form-data" target="hidden_iframe" class="hidden">
+       
+       <div id="section0" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 0 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">Datos de contacto</h2>
+          <p class="text-slate-400 mt-2">Comencemos con la información básica de tu organización.</p>
+         </div>
+         <div class="space-y-6">
+          <div class="grid sm:grid-cols-2 gap-6">
+           <div><label class="block text-sm font-medium text-slate-300 mb-2">Nombre *</label> <input type="text" name="fi-sender-firstName" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Tu nombre" data-required="true"></div>
+           <div><label class="block text-sm font-medium text-slate-300 mb-2">Apellidos *</label> <input type="text" name="fi-sender-lastName" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Tus apellidos" data-required="true"></div>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Nombre de la organización *</label> <input type="text" name="fi-text-organizacion" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Nombre de tu empresa u organización" data-required="true"></div>
+          
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Correo electrónico *</label> <input type="email" name="fi-sender-email" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="correo@ejemplo.com" data-required="true"></div>
+          
+          <div><label class="block text-sm font-medium text-slate-300 mb-4">Indica lo que necesitas *</label>
+           <div class="space-y-3">
+             <label class="checkbox-card block p-4 rounded-xl cursor-pointer" data-checkbox="rediseno">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-white font-medium">Rediseño de Imagen Visual Corporativa</span>
+             </div><input type="checkbox" name="fi-text-necesidad_rediseno" value="Rediseño de Imagen Visual Corporativa" class="sr-only"> </label> 
+             <label class="checkbox-card block p-4 rounded-xl cursor-pointer" data-checkbox="manual">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-white font-medium">Creación de un Manual de Imagen Visual Corporativa</span>
+             </div><input type="checkbox" name="fi-text-necesidad_manual" value="Creación de un Manual de Imagen Visual Corporativa" class="sr-only"> </label>
+           </div>
+           <p id="checkboxError" class="text-red-400 text-sm mt-2 hidden">Por favor, selecciona al menos una opción</p>
+          </div>
+         </div>
+         <div class="flex justify-end mt-8">
+           <button type="button" onclick="nextSection(0)" id="nextBtn0" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold disabled:opacity-50" disabled> Siguiente 
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></button>
+         </div>
+        </div>
+       </div>
+       
+       <div id="section1" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 1 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">El Logotipo y la Esencia Visual</h2>
+          <p class="text-slate-400 mt-2">Cuéntanos sobre vuestro logotipo actual y vuestras necesidades.</p>
+         </div>
+         <div class="space-y-8">
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">El 'Por qué' *</label>
+           <p class="text-slate-500 text-sm mb-3">Si ya tenéis un logotipo, ¿qué historia o concepto hay detrás de él? Si estamos buscando un rediseño, ¿qué elemento actual queréis conservar obligatoriamente y qué queréis dejar atrás para siempre?</p><textarea name="fi-text-logotipo_historia" required rows="4" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe la historia y concepto de vuestro logotipo..." data-required="true"></textarea>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Formatos actuales</label>
+           <p class="text-slate-500 text-sm mb-3">¿Disponéis de los archivos originales de vuestro logotipo en alta calidad o formato vector (Illustrator, EPS, PDF)? En caso de rediseño, adjunta el Plan de Imagen Visual Corporativo, manuales o cualquier información que dispongas.</p>
+           <div id="fileDropZone1" class="file-drop-zone rounded-xl p-8 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-slate-500 mb-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="17 8 12 3 7 8"></polyline> <line x1="12" x2="12" y1="3" y2="15"></line></svg>
+            <p class="text-slate-400 mb-2">Por favor, adjuntadlos aquí</p>
+            <p class="text-slate-500 text-sm mb-4">Arrastra archivos o haz clic para seleccionar</p>
+            <input type="file" name="fi-file-archivos_logo[]" multiple accept=".ai,.eps,.pdf,.svg,.png,.jpg,.jpeg" class="sr-only" id="fileInput1"> 
+            <button type="button" onclick="document.getElementById('fileInput1').click()" class="btn-secondary px-6 py-2 rounded-lg text-sm"> Seleccionar archivos </button>
+            <div id="fileList1" class="mt-4 space-y-2"></div>
+           </div>
+          </div>
+         </div>
+         <div class="flex justify-between mt-8">
+           <button type="button" onclick="prevSection(1)" class="btn-secondary px-6 py-3 rounded-xl font-heading font-semibold">
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2"><path d="M19 12H5" /> <path d="m12 19-7-7 7-7" /></svg> Anterior </button> 
+           <button type="button" onclick="nextSection(1)" id="nextBtn1" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold" disabled> Siguiente 
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></button>
+         </div>
+        </div>
+       </div>
+       
+       <div id="section2" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 2 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">Colores y Tipografías (Las Letras)</h2>
+          <p class="text-slate-400 mt-2">Definamos vuestra paleta de colores y tipografías corporativas.</p>
+         </div>
+         <div class="space-y-8">
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Colores corporativos *</label>
+           <p class="text-slate-500 text-sm mb-3">Más allá de los colores que ya usáis, ¿hay algún color que esté terminantemente prohibido usar para vuestra marca (por ejemplo, porque es el color exacto de vuestro mayor competidor o porque no encaja con vuestro sector)?</p><textarea name="fi-text-colores_prohibidos" required rows="3" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe los colores prohibidos y por qué..." data-required="true"></textarea>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">El día a día en la oficina *</label>
+           <p class="text-slate-500 text-sm mb-3">Cuando enviáis un documento editable a un cliente externo (un Word, un PowerPoint, un Excel), ¿qué tipo de letra soléis utilizar para aseguraros de que no se desconfigure al abrirlo? (Ej: Arial, Calibri, Verdana...)</p><input type="text" name="fi-text-tipografia_oficina" required class="input-field w-full px-4 py-3 rounded-xl text-white" placeholder="Ej: Arial, Calibri, Verdana..." data-required="true">
+          </div>
+         </div>
+         <div class="flex justify-between mt-8">
+           <button type="button" onclick="prevSection(2)" class="btn-secondary px-6 py-3 rounded-xl font-heading font-semibold">
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2"><path d="M19 12H5" /> <path d="m12 19-7-7 7-7" /></svg> Anterior </button> 
+           <button type="button" onclick="nextSection(2)" id="nextBtn2" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold" disabled> Siguiente 
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></button>
+         </div>
+        </div>
+       </div>
+       
+       <div id="section3" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 3 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">El Universo Fotográfico e Iconos</h2>
+          <p class="text-slate-400 mt-2">Define el estilo visual que mejor representa a tu marca.</p>
+         </div>
+         <div class="space-y-8">
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Vuestro estilo de fotos *</label>
+           <p class="text-slate-500 text-sm mb-3">Si tuvierais que ilustrar vuestra web o catálogo, ¿cómo os gustaría que fueran las fotografías? (Ej: Personas de vuestro equipo trabajando de forma natural, posados mirando a cámara, espacios de oficina vacíos, fotos muy luminosas, fotos en blanco y negro...)</p><textarea name="fi-text-estilo_fotos" required rows="3" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe el estilo fotográfico que preferís..." data-required="true"></textarea>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Lo que NO queréis *</label>
+           <p class="text-slate-500 text-sm mb-3">¿Hay algún tipo de fotografía o cliché que odiéis y no queráis ver jamás asociado a vuestra marca? (Ej: Las típicas fotos de banco de imágenes de señores en traje dándose la mano)</p><textarea name="fi-text-fotos_prohibidas" required rows="3" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe qué tipo de fotos queréis evitar..." data-required="true"></textarea>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-300 mb-2">Iconografía *</label>
+           <p class="text-slate-500 text-sm mb-3">Para los iconos de vuestra web o presentaciones (la lupa, el carrito, el teléfono), ¿preferís un estilo minimalista de líneas finas, o un estilo más sólido y relleno?</p>
+           <div class="grid sm:grid-cols-2 gap-4">
+            <label class="checkbox-card p-6 rounded-xl cursor-pointer text-center" data-radio="iconografia" data-value="lineas">
+             <div class="flex justify-center gap-4 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><circle cx="11" cy="11" r="8"></circle> <path d="m21 21-4.3-4.3" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><circle cx="8" cy="21" r="1"></circle> <circle cx="19" cy="21" r="1"></circle> <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+             </div><span class="text-white font-medium">Minimalista (líneas finas)</span> <input type="radio" name="fi-text-iconografia" value="Estilo minimalista de líneas finas" class="sr-only" required> </label> 
+            <label class="checkbox-card p-6 rounded-xl cursor-pointer text-center" data-radio="iconografia" data-value="solido">
+             <div class="flex justify-center gap-4 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewbox="0 0 24 24" fill="currentColor" class="text-slate-400"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewbox="0 0 24 24" fill="currentColor" class="text-slate-400"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewbox="0 0 24 24" fill="currentColor" class="text-slate-400"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" /></svg>
+             </div><span class="text-white font-medium">Sólido (relleno)</span> <input type="radio" name="fi-text-iconografia" value="Estilo sólido y relleno" class="sr-only"> </label>
+           </div>
+           <p id="iconografiaError" class="text-red-400 text-sm mt-2 hidden">Por favor, selecciona un estilo de iconografía</p>
+          </div>
+         </div>
+         <div class="flex justify-between mt-8">
+           <button type="button" onclick="prevSection(3)" class="btn-secondary px-6 py-3 rounded-xl font-heading font-semibold">
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2"><path d="M19 12H5" /> <path d="m12 19-7-7 7-7" /></svg> Anterior </button> 
+           <button type="button" onclick="nextSection(3)" id="nextBtn3" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold" disabled> Siguiente 
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></button>
+         </div>
+        </div>
+       </div>
+       
+       <div id="section4" class="section hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-10">
+         <div class="mb-8"><span class="text-orange-400 text-sm font-medium tracking-wider uppercase">Sección 4 de 4</span>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-2">Aplicaciones y Soportes</h2>
+          <p class="text-slate-400 mt-2">Para no diseñar elementos que nunca vais a utilizar, marcad por favor qué soportes necesitáis que dejemos estandarizados en el manual.</p>
+         </div>
+         <div class="space-y-8">
+          
+          <div>
+           <h3 class="font-heading text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /> <polyline points="14 2 14 8 20 8"></polyline></svg> Papelería y Oficina</h3>
+           <div class="grid sm:grid-cols-2 gap-3">
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="tarjetas">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Tarjetas de visita</span>
+             </div><input type="checkbox" name="fi-text-soporte_tarjetas" value="Tarjetas de visita" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="hojas">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Hojas para facturas/cartas (A4)</span>
+             </div><input type="checkbox" name="fi-text-soporte_hojas" value="Hojas para facturas/cartas (A4)" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="sobres">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Sobres americanos</span>
+             </div><input type="checkbox" name="fi-text-soporte_sobres" value="Sobres americanos" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="carpetas">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Carpetas corporativas</span>
+             </div><input type="checkbox" name="fi-text-soporte_carpetas" value="Carpetas corporativas" class="sr-only"> </label>
+           </div>
+          </div>
+          
+          <div>
+           <h3 class="font-heading text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><rect width="20" height="14" x="2" y="3" rx="2"></rect> <line x1="8" x2="16" y1="21" y2="21"></line> <line x1="12" x2="12" y1="17" y2="21"></line></svg> Entorno Digital</h3>
+           <div class="grid sm:grid-cols-2 gap-3">
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="firma">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Plantilla para firma de correo electrónico</span>
+             </div><input type="checkbox" name="fi-text-soporte_firma" value="Plantilla para firma de correo electrónico" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="newsletter">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Cabeceras para Newsletters</span>
+             </div><input type="checkbox" name="fi-text-soporte_newsletter" value="Cabeceras para Newsletters" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="redes">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Avatares y cabeceras para Redes Sociales</span>
+             </div><input type="checkbox" name="fi-text-soporte_redes" value="Avatares y cabeceras para Redes Sociales" class="sr-only"> </label>
+           </div>
+          </div>
+          
+          <div>
+           <h3 class="font-heading text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> <polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Entorno Físico y Personal</h3>
+           <div class="grid sm:grid-cols-2 gap-3">
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="uniformes">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Uniformes de cara al público</span>
+             </div><input type="checkbox" name="fi-text-soporte_uniformes" value="Uniformes de cara al público" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="ropa_trabajo">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Ropa de trabajo y seguridad industrial</span>
+             </div><input type="checkbox" name="fi-text-soporte_ropa_trabajo" value="Ropa de trabajo y seguridad industrial" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="vehiculos">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Rotulación de vehículos comerciales</span>
+             </div><input type="checkbox" name="fi-text-soporte_vehiculos" value="Rotulación de vehículos comerciales" class="sr-only"> </label> 
+            <label class="checkbox-card p-4 rounded-xl cursor-pointer" data-checkbox="senaletica">
+             <div class="flex items-center gap-3">
+              <div class="w-6 h-6 rounded-md border-2 border-slate-500 flex items-center justify-center checkbox-indicator">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="hidden check-icon text-orange-400"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div><span class="text-slate-300">Señalética para oficinas y rótulos exteriores</span>
+             </div><input type="checkbox" name="fi-text-soporte_senaletica" value="Señalética para oficinas y rótulos exteriores" class="sr-only"> </label>
+           </div>
+          </div>
+          
+          <div>
+           <h3 class="font-heading text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></svg> Merchandising</h3><label class="block text-sm font-medium text-slate-300 mb-2">¿Soléis hacer regalos? ¿De qué tipo?</label>
+           <p class="text-slate-500 text-sm mb-3">(Bolígrafos, tazas, libretas, bolsas de tela...) Especificad los más habituales.</p><textarea name="fi-text-merchandising" rows="3" class="input-field w-full px-4 py-3 rounded-xl text-white resize-none" placeholder="Describe los tipos de merchandising que soléis utilizar..."></textarea>
+          </div>
+         </div>
+         <div class="flex justify-between mt-8">
+           <button type="button" onclick="prevSection(4)" class="btn-secondary px-6 py-3 rounded-xl font-heading font-semibold">
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2"><path d="M19 12H5" /> <path d="m12 19-7-7 7-7" /></svg> Anterior </button> 
+           <button type="submit" id="submitBtn" class="btn-primary px-8 py-3 rounded-xl font-heading font-semibold"> <span id="submitText">Enviar cuestionario</span>
+           <svg id="submitIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline ml-2"><path d="m22 2-7 20-4-9-9-4Z" /> <path d="M22 2 11 13" /></svg>
+           <svg id="loadingIcon" class="hidden animate-spin inline ml-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg></button>
+         </div>
+        </div>
+       </div>
+      </form>
+      
+      <div id="successScreen" class="hidden section-enter">
+       <div class="glass-card rounded-3xl p-8 sm:p-12 text-center">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center">
+         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewbox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /> <polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <h2 class="font-heading text-3xl font-bold text-white mb-4">¡Cuestionario enviado!</h2>
+        <p class="text-slate-400 text-lg mb-8 max-w-xl mx-auto">Gracias por completar el cuestionario. Hemos recibido vuestra información y nos pondremos en contacto pronto para comenzar a trabajar en vuestra identidad visual.</p><button onclick="goToStart()" class="btn-secondary px-8 py-3 rounded-xl font-heading font-semibold"> Volver al inicio </button>
+       </div>
+      </div>
+      
+     </div>
+    </main>
+    
+    <footer class="py-6 px-4 sm:px-8 text-center shrink-0">
+     <p class="text-slate-500 text-sm">© 2026 Cuestionario de Identidad Visual</p>
+    </footer>
+  </div>
+  
+  <script>
+    let currentSection = -1;
+    const totalSections = 5;
+    
+    // Setup checkbox cards
+    document.querySelectorAll('.checkbox-card[data-checkbox]').forEach(card => {
+      card.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checkbox = this.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        this.classList.toggle('selected', checkbox.checked);
+        this.querySelector('.check-icon').classList.toggle('hidden', !checkbox.checked);
+        this.querySelector('.checkbox-indicator').classList.toggle('border-orange-400', checkbox.checked);
+        this.querySelector('.checkbox-indicator').classList.toggle('border-slate-500', !checkbox.checked);
+        validateSection(currentSection);
+      });
+    });
+    
+    // Setup radio cards
+    document.querySelectorAll('.checkbox-card[data-radio]').forEach(card => {
+      card.addEventListener('click', function(e) {
+        e.preventDefault();
+        const radioName = this.dataset.radio;
+        
+        // Deselect all in group
+        document.querySelectorAll(`.checkbox-card[data-radio="${radioName}"]`).forEach(c => {
+          c.classList.remove('selected');
+          c.querySelector('input[type="radio"]').checked = false;
+        });
+        
+        // Select this one
+        this.classList.add('selected');
+        this.querySelector('input[type="radio"]').checked = true;
+        
+        validateSection(currentSection);
+      });
+    });
+    
+    // Setup file drop zones
+    const fileDropZone1 = document.getElementById('fileDropZone1');
+    const fileInput1 = document.getElementById('fileInput1');
+    const fileList1 = document.getElementById('fileList1');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      fileDropZone1.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+      fileDropZone1.addEventListener(eventName, () => fileDropZone1.classList.add('dragover'), false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+      fileDropZone1.addEventListener(eventName, () => fileDropZone1.classList.remove('dragover'), false);
+    });
+    
+    fileDropZone1.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      fileInput1.files = files;
+      updateFileList(files, fileList1);
+    });
+    
+    fileInput1.addEventListener('change', (e) => {
+      updateFileList(e.target.files, fileList1);
+    });
+    
+    function updateFileList(files, container) {
+      container.innerHTML = '';
+      Array.from(files).forEach(file => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2 text-sm text-slate-300 bg-slate-800 px-3 py-2 rounded-lg';
+        div.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-400">
+            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <span class="truncate">${file.name}</span>
+          <span class="text-slate-500">(${formatFileSize(file.size)})</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+    
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Input validation listeners
+    document.querySelectorAll('input[data-required], textarea[data-required]').forEach(input => {
+      input.addEventListener('input', () => validateSection(currentSection));
+    });
+    
+    function validateSection(sectionNum) {
+      const section = document.getElementById(`section${sectionNum}`);
+      if (!section) return false;
+      
+      const requiredInputs = section.querySelectorAll('input[data-required], textarea[data-required]');
+      let allFilled = true;
+      
+      requiredInputs.forEach(input => {
+        // Revisamos que no esté vacío
+        if (!input.value.trim()) {
+          allFilled = false;
+        }
+        // NUEVO: Revisamos que si es un email, tenga formato de email real (@ y .)
+        if (input.type === 'email' && input.value.trim()) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(input.value)) {
+            allFilled = false;
+          }
+        }
+      });
+      
+      // Checkboxes sección 0
+      if (sectionNum === 0) {
+        const checkboxes = section.querySelectorAll('input[type="checkbox"][name^="fi-text-necesidad"]');
+        const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+        if (!anyChecked) allFilled = false;
+      }
+      
+      // Radio sección 3
+      if (sectionNum === 3) {
+        const iconografiaSelected = document.querySelector('input[name="fi-text-iconografia"]:checked');
+        if (!iconografiaSelected) allFilled = false;
+      }
+      
+      const nextBtn = document.getElementById(`nextBtn${sectionNum}`);
+      if (nextBtn) {
+        nextBtn.disabled = !allFilled;
+      }
+      
+      return allFilled;
+    }
+    
+    function startQuestionnaire() {
+      document.getElementById('welcomeScreen').classList.add('hidden');
+      document.getElementById('questionnaireForm').classList.remove('hidden');
+      document.getElementById('progressBar').classList.remove('hidden');
+      document.getElementById('homeBtn').classList.remove('hidden');
+      document.getElementById('homeBtn').classList.add('flex');
+      showSection(0);
+    }
+    
+    function showSection(sectionNum) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      
+      // Show target section
+      const targetSection = document.getElementById(`section${sectionNum}`);
+      if (targetSection) {
+        targetSection.classList.remove('hidden');
+        targetSection.classList.add('section-enter');
+        currentSection = sectionNum;
+        updateProgress(sectionNum);
+        validateSection(sectionNum);
+        
+        // Scroll to top
+        document.getElementById('app').scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+    
+    function updateProgress(currentStep) {
+      for (let i = 0; i < totalSections; i++) {
+        const step = document.querySelector(`.progress-step[data-step="${i}"]`);
+        const line = document.querySelector(`.progress-line[data-line="${i}"]`);
+        
+        if (i < currentStep) {
+          step.classList.add('completed');
+          step.classList.remove('active');
+          if (line) line.classList.add('completed');
+        } else if (i === currentStep) {
+          step.classList.add('active');
+          step.classList.remove('completed');
+          if (line) line.classList.remove('completed');
+        } else {
+          step.classList.remove('active', 'completed');
+          if (line) line.classList.remove('completed');
+        }
+      }
+    }
+    
+    function nextSection(current) {
+      if (current === 0) {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name^="fi-text-necesidad"]');
+        const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+        if (!anyChecked) {
+          document.getElementById('checkboxError').classList.remove('hidden');
+          return;
+        }
+        document.getElementById('checkboxError').classList.add('hidden');
+      }
+      
+      if (current === 3) {
+        const iconografiaSelected = document.querySelector('input[name="fi-text-iconografia"]:checked');
+        if (!iconografiaSelected) {
+          document.getElementById('iconografiaError').classList.remove('hidden');
+          return;
+        }
+        document.getElementById('iconografiaError').classList.add('hidden');
+      }
+      
+      if (validateSection(current)) {
+        showSection(current + 1);
+      }
+    }
+    
+    function prevSection(current) {
+      showSection(current - 1);
+    }
+    
+    function goToStart() {
+      currentSection = -1;
+      document.getElementById('questionnaireForm').classList.add('hidden');
+      document.getElementById('questionnaireForm').reset();
+      document.getElementById('progressBar').classList.add('hidden');
+      document.getElementById('successScreen').classList.add('hidden');
+      document.getElementById('welcomeScreen').classList.remove('hidden');
+      document.getElementById('homeBtn').classList.add('hidden');
+      document.getElementById('homeBtn').classList.remove('flex');
+      
+      // Reset all checkbox cards
+      document.querySelectorAll('.checkbox-card').forEach(card => {
+        card.classList.remove('selected');
+        const checkIcon = card.querySelector('.check-icon');
+        if (checkIcon) checkIcon.classList.add('hidden');
+        const indicator = card.querySelector('.checkbox-indicator');
+        if (indicator) {
+          indicator.classList.remove('border-orange-400');
+          indicator.classList.add('border-slate-500');
+        }
+      });
+      
+      // Reset file lists
+      document.getElementById('fileList1').innerHTML = '';
+      
+      // Reset progress
+      document.querySelectorAll('.progress-step').forEach(s => s.classList.remove('active', 'completed'));
+      document.querySelectorAll('.progress-line').forEach(l => l.classList.remove('completed'));
+      
+      // Scroll to top
+      document.getElementById('app').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type === 'success' ? 'bg-green-500/90' : 'bg-red-500/90'} text-white font-medium rounded-xl`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-20px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // --- LÓGICA DE ENVÍO CON IFRAME OCULTO (FINAL) ---
+    let isSubmitting = false;
+
+    document.getElementById('hidden_iframe').addEventListener('load', function() {
+      if (isSubmitting) {
+        document.getElementById('questionnaireForm').classList.add('hidden');
+        document.getElementById('progressBar').classList.add('hidden');
+        document.getElementById('successScreen').classList.remove('hidden');
+        showToast('¡Cuestionario enviado correctamente!', 'success');
+        isSubmitting = false;
+      }
+    });
+
+    document.getElementById('questionnaireForm').addEventListener('submit', function() {
+      isSubmitting = true;
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const submitText = document.getElementById('submitText');
+      const submitIcon = document.getElementById('submitIcon');
+      const loadingIcon = document.getElementById('loadingIcon');
+      
+      submitBtn.disabled = true;
+      submitText.textContent = 'Enviando...';
+      submitIcon.classList.add('hidden');
+      loadingIcon.classList.remove('hidden');
+    });
+
+  </script>
+ </body>
+</html>
